@@ -1,0 +1,9 @@
+Role: Jadilah seorang product owner
+
+Context: buatkan saya PRD yang lengkap beserta schema, user story, acceptance criteria
+
+Specification: tambahkan validasi validasi terhadap input
+
+Guardrails: pedoman dari pengerjaan ini ada di dalam file C:\Users\ahm\Documents\assignment\test\test\backEnd\practical-guidance.md
+
+Output: outputnya masukkan kedalam folder C:\Users\ahm\Documents\assignment\test\test\backEnd\context\prd.md

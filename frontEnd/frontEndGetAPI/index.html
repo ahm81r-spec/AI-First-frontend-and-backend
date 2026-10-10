@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MW75 TUMI — Master &amp; Dynamic</title>
+    <link rel="preconnect" href="https://cdn.shopify.com" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <!-- ═══════════════════════════════════════════
+       HEADER
+  ═══════════════════════════════════════════ -->
+    <header class="site-header" role="banner">
+      <div class="header-inner">
+        <!-- Logo -->
+        <a href="#" class="logo" aria-label="Master &amp; Dynamic — home">
+          <span class="logo-md">M&amp;D</span>
+          <span class="logo-sep" aria-hidden="true"></span>
+          <span class="logo-sub">Master &amp; Dynamic</span>
+        </a>
+
+        <!-- Nav -->
+        <nav class="header-nav" aria-label="Main navigation">
+          <a href="#">Headphones</a>
+          <a href="#">Earphones</a>
+          <a href="#">Accessories</a>
+          <a href="#">About</a>
+        </nav>
+
+        <!-- Cart -->
+        <button
+          class="cart-btn"
+          id="cartBtn"
+          aria-label="Open cart"
+          aria-haspopup="dialog"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M6 2 3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <path d="M16 10a4 4 0 01-8 0" />
+          </svg>
+          <span class="cart-badge" id="cartCount" aria-live="polite">0</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ═══════════════════════════════════════════
+       CART DRAWER
+  ═══════════════════════════════════════════ -->
+    <div
+      class="cart-overlay"
+      id="cartOverlay"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Shopping cart"
+      hidden
+    >
+      <div class="cart-drawer">
+        <div class="cart-drawer-head">
+          <h2 class="cart-drawer-title">Cart</h2>
+          <button class="cart-close" id="cartCloseBtn" aria-label="Close cart">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="cart-body" id="cartItemsList">
+          <p class="cart-empty">Your cart is empty.</p>
+        </div>
+
+        <div class="cart-foot" id="cartFooter" hidden>
+          <div class="cart-subtotal-row">
+            <span>Subtotal</span>
+            <span id="drawerSubtotal">$0.00</span>
+          </div>
+          <button class="btn-checkout" id="checkoutBtn">CHECKOUT</button>
+          <p class="checkout-confirm" id="checkoutNote" aria-live="polite"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+       MAIN
+  ═══════════════════════════════════════════ -->
+    <main id="main">
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <div class="container">
+          <a href="#">Headphones</a>
+          <span aria-hidden="true">/</span>
+          <span id="breadcrumbProduct" aria-current="page">Product</span>
+        </div>
+      </nav>
+
+      <p id="pageStatus" class="page-status" role="status" aria-live="polite">
+        Loading product details…
+      </p>
+      <div id="pageError" class="page-error container" role="alert" hidden>
+        <p id="errorMessage"></p>
+        <button class="retry-button" id="retryButton" type="button">Try again</button>
+      </div>
+
+      <!-- ── Product layout ── -->
+      <div class="product-wrap container" id="productPage" aria-busy="true" hidden>
+        <!-- ════ LEFT: GALLERY ════ -->
+        <section class="gallery" aria-label="Product images">
+          <!-- Thumbnails (left strip on desktop) -->
+          <div
+            class="gallery-strip"
+            id="thumbsContainer"
+            role="list"
+            aria-label="Image thumbnails"
+          >
+            <!-- JS renders these -->
+          </div>
+
+          <!-- Main image -->
+          <div class="gallery-stage" tabindex="0" aria-label="Product image gallery">
+            <button
+              class="g-arrow g-prev"
+              id="galleryPrev"
+              aria-label="Previous image"
+            >
+              <svg
+                width="10"
+                height="18"
+                viewBox="0 0 10 18"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <polyline points="9 1 1 9 9 17" />
+              </svg>
+            </button>
+
+            <img
+              id="mainImage"
+              alt=""
+              class="gallery-img"
+            />
+
+            <button
+              class="g-arrow g-next"
+              id="galleryNext"
+              aria-label="Next image"
+            >
+              <svg
+                width="10"
+                height="18"
+                viewBox="0 0 10 18"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <polyline points="1 1 9 9 1 17" />
+              </svg>
+            </button>
+
+            <!-- Dot indicator (mobile) -->
+            <div class="g-dots" id="gDots" aria-hidden="true"></div>
+          </div>
+        </section>
+
+        <!-- ════ RIGHT: PRODUCT INFO ════ -->
+        <section class="product-info" aria-label="Product details">
+          <!-- Eyebrow -->
+          <p class="eyebrow">Master &amp; Dynamic for TUMI</p>
+
+          <!-- Title -->
+          <h1 class="product-title" id="productName"></h1>
+          <p class="product-subtitle" id="productSubtitle"></p>
+
+          <!-- Price -->
+          <p class="product-price" id="productPrice" aria-label="Product price">
+            <span class="price-amount" id="priceAmount"></span>
+          </p>
+
+          <!-- Short description -->
+          <p class="product-desc" id="productDescription"></p>
+
+          <!-- ── Color selector ── -->
+          <div class="option-block">
+            <p class="option-heading">
+              Color:
+              <span
+                class="option-value"
+                id="selectedColorLabel"
+                aria-live="polite"
+                ></span
+              >
+            </p>
+            <div
+              class="color-list"
+              id="colorOptions"
+              role="radiogroup"
+              aria-label="Select color"
+            >
+            </div>
+          </div>
+
+          <!-- ── Quantity ── -->
+          <div class="option-block">
+            <p class="option-heading">Quantity</p>
+            <div class="qty-wrap" role="group" aria-label="Quantity">
+              <button
+                class="qty-btn"
+                id="qtyMinus"
+                aria-label="Decrease quantity"
+              >
+                −
+              </button>
+              <span
+                class="qty-val"
+                id="qtyDisplay"
+                aria-live="polite"
+                aria-atomic="true"
+                >1</span
+              >
+              <button
+                class="qty-btn"
+                id="qtyPlus"
+                aria-label="Increase quantity"
+              >
+                +
+              </button>
+            </div>
+            <p class="qty-note" id="qtyLimitNote" aria-live="polite"></p>
+          </div>
+
+          <!-- ── Add to cart ── -->
+          <button
+            class="btn-atc"
+            id="addToCartBtn"
+            aria-label="Add product to cart"
+          >
+            Add to Cart
+          </button>
+
+          <!-- Confirmation -->
+          <div
+            class="atc-confirm"
+            id="confirmationMsg"
+            role="status"
+            aria-live="polite"
+            hidden
+          ></div>
+
+          <!-- ── Accordion: Tech Specs ── -->
+          <div class="accordion">
+            <details class="accordion-item" open>
+              <summary class="accordion-head">
+                <span>Materials &amp; Design</span>
+                <svg
+                  class="acc-chevron"
+                  width="12"
+                  height="8"
+                  viewBox="0 0 12 8"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  aria-hidden="true"
+                >
+                  <polyline points="1 1 6 7 11 1" />
+                </svg>
+              </summary>
+              <div class="accordion-body">
+                <table class="spec-table">
+                  <tbody>
+                    <tr>
+                      <th>Materials</th>
+                      <td>
+                        Lambskin leather headband &amp; ear pads / anodized
+                        aluminum controls
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Dimensions</th>
+                      <td>160.75 × 197.83 × 83.57 mm</td>
+                    </tr>
+                    <tr>
+                      <th>Weight</th>
+                      <td>338 g</td>
+                    </tr>
+                    <tr>
+                      <th>Ear Coupling</th>
+                      <td>Over-Ear</td>
+                    </tr>
+                    <tr>
+                      <th>Ear Pads</th>
+                      <td>Replaceable magnetic lambskin-wrapped memory foam</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </details>
+
+            <details class="accordion-item">
+              <summary class="accordion-head">
+                <span>Sound &amp; Features</span>
+                <svg
+                  class="acc-chevron"
+                  width="12"
+                  height="8"
+                  viewBox="0 0 12 8"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  aria-hidden="true"
+                >
+                  <polyline points="1 1 6 7 11 1" />
+                </svg>
+              </summary>
+              <div class="accordion-body">
+                <table class="spec-table">
+                  <tbody>
+                    <tr>
+                      <th>Drivers</th>
+                      <td>40 mm Beryllium</td>
+                    </tr>
+                    <tr>
+                      <th>Impedance</th>
+                      <td>32 Ohms</td>
+                    </tr>
+                    <tr>
+                      <th>Talk Mics</th>
+                      <td>4-mic solution with wind protection</td>
+                    </tr>
+                    <tr>
+                      <th>ANC Mics</th>
+                      <td>4-mic Adaptive ANC solution</td>
+                    </tr>
+                    <tr>
+                      <th>Voice Assistant</th>
+                      <td>Compatible with native voice assistants</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </details>
+
+            <details class="accordion-item">
+              <summary class="accordion-head">
+                <span>Connectivity &amp; Charging</span>
+                <svg
+                  class="acc-chevron"
+                  width="12"
+                  height="8"
+                  viewBox="0 0 12 8"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  aria-hidden="true"
+                >
+                  <polyline points="1 1 6 7 11 1" />
+                </svg>
+              </summary>
+              <div class="accordion-body">
+                <table class="spec-table">
+                  <tbody>
+                    <tr>
+                      <th>Battery Life</th>
+                      <td>Up to 32 hrs / 28 hrs with ANC enabled</td>
+                    </tr>
+                    <tr>
+                      <th>Bluetooth</th>
+                      <td>
+                        5.1 · 100 ft / 30 m · AAC, aptX™ Adaptive 24-bit/48kHz,
+                        SBC
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Wired Digital</th>
+                      <td>Hi-res up to 24-bit/96kHz via USB-C to USB-C</td>
+                    </tr>
+                    <tr>
+                      <th>Analog</th>
+                      <td>USB-C to 3.5 mm cable</td>
+                    </tr>
+                    <tr>
+                      <th>Cables Included</th>
+                      <td>USB-C to 3.5 mm audio, USB-C to USB-C charging</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </details>
+
+            <details class="accordion-item">
+              <summary class="accordion-head">
+                <span>In the Box</span>
+                <svg
+                  class="acc-chevron"
+                  width="12"
+                  height="8"
+                  viewBox="0 0 12 8"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  aria-hidden="true"
+                >
+                  <polyline points="1 1 6 7 11 1" />
+                </svg>
+              </summary>
+              <div class="accordion-body">
+                <ul class="box-list">
+                  <li>Wireless Headphones</li>
+                  <li>USB-C to USB-C Charging Cable</li>
+                  <li>USB-C to 3.5 mm Audio Cable</li>
+                  <li>USB-C to USB-A Adapter</li>
+                  <li>3.5 mm to ¼″ Adapter</li>
+                  <li>Flight Adapter</li>
+                  <li>Hard Shell Travel Case</li>
+                </ul>
+              </div>
+            </details>
+          </div>
+          <!-- /accordion -->
+        </section>
+        <!-- /product-info -->
+      </div>
+      <!-- /product-wrap -->
+    </main>
+
+    <!-- ═══════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════ -->
+    <footer class="site-footer" role="contentinfo">
+      <div class="footer-inner container">
+        <p class="footer-logo">Master &amp; Dynamic</p>
+        <p class="footer-copy">
+          &copy; 2026 Master &amp; Dynamic. All rights reserved.
+        </p>
+      </div>
+    </footer>
+
+    <script src="app.js"></script>
+
+    <!-- Accordion JS (no framework) -->
+    <script>
+      // Sync chevron rotation with <details> open state
+      document.querySelectorAll(".accordion-item").forEach((detail) => {
+        detail.addEventListener("toggle", () => {
+          const chevron = detail.querySelector(".acc-chevron");
+          if (chevron)
+            chevron.style.transform = detail.open ? "rotate(180deg)" : "";
+        });
+        // Init open items
+        const chevron = detail.querySelector(".acc-chevron");
+        if (chevron && detail.open) chevron.style.transform = "rotate(180deg)";
+      });
+    </script>
+  </body>
+</html>
